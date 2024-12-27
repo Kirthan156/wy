@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequence Code Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            font-family: monospace;
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Choose a Sequence and Language</h1>
+        
+        <select id="sequence">
+            <option value="fibonacci">Fibonacci</option>
+            <option value="armstrong">Armstrong</option>
+            <option value="catalan">Catalan</option>
+        </select>
+
+        <select id="language">
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="r">R</option>
+            <option value="sql">SQL</option>
+        </select>
+
+        <button onclick="displaySelection()">Show Code</button>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const codeExamples = {
+            fibonacci: {
+                python: "def fibonacci(n):\n    a, b = 0, 1\n    for _ in range(n):\n        print(a, end=' ')\n        a, b = b, a + b\n\nfibonacci(10)",
+                java: "public class Fibonacci {\n    public static void main(String[] args) {\n        int n = 10, t1 = 0, t2 = 1;\n        System.out.print(\"First \" + n + \" terms: \");\n\n        for (int i = 1; i <= n; ++i) {\n            System.out.print(t1 + \" + \");\n            int sum = t1 + t2;\n            t1 = t2;\n            t2 = sum;\n        }\n    }\n}",
+                c: "#include <stdio.h>\n\nint main() {\n    int n = 10, t1 = 0, t2 = 1;\n    printf(\"First %d terms: \", n);\n    for (int i = 1; i <= n; ++i) {\n        printf(\"%d \", t1);\n        int sum = t1 + t2;\n        t1 = t2;\n        t2 = sum;\n    }\n    return 0;\n}",
+                cpp: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int n = 10, t1 = 0, t2 = 1;\n    cout << \"First \" << n << \" terms: \";\n    for (int i = 1; i <= n; ++i) {\n        cout << t1 << \" \";\n        int sum = t1 + t2;\n        t1 = t2;\n        t2 = sum;\n    }\n    return 0;\n}",
+                r: "fibonacci <- function(n) {\n    a <- 0; b <- 1;\n    for (i in 1:n) {\n        cat(a, \" \");\n        temp <- a;\n        a <- b;\n        b <- temp + b;\n    }\n}\nfibonacci(10)",
+                sql: "WITH RECURSIVE fibonacci(n, a, b) AS (\n    SELECT 0, 0, 1\n    UNION ALL\n    SELECT n + 1, b, a + b\n    FROM fibonacci\n    WHERE n < 10\n)\nSELECT a FROM fibonacci;"
+            },
+            armstrong: {
+                python: "def is_armstrong(n):\n    num = n\n    sum = 0\n    while num > 0:\n        digit = num % 10\n        sum += digit ** 3\n        num //= 10\n    return sum == n\n\nprint(is_armstrong(153))",
+                java: "public class Armstrong {\n    public static void main(String[] args) {\n        int n = 153, sum = 0, num = n;\n        while (num > 0) {\n            int digit = num % 10;\n            sum += Math.pow(digit, 3);\n            num /= 10;\n        }\n        System.out.println(sum == n);\n    }\n}",
+                c: "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    int n = 153, sum = 0, num = n;\n    while (num > 0) {\n        int digit = num % 10;\n        sum += pow(digit, 3);\n        num /= 10;\n    }\n    printf(\"%d is %s Armstrong number.\\n\", n, (sum == n) ? \"an\" : \"not an\");\n    return 0;\n}",
+                cpp: "#include <iostream>\n#include <cmath>\nusing namespace std;\n\nint main() {\n    int n = 153, sum = 0, num = n;\n    while (num > 0) {\n        int digit = num % 10;\n        sum += pow(digit, 3);\n        num /= 10;\n    }\n    cout << (sum == n ? \"An Armstrong number.\" : \"Not an Armstrong number.\") << endl;\n    return 0;\n}",
+                r: "is_armstrong <- function(n) {\n    num <- n\n    sum <- 0\n    while (num > 0) {\n        digit <- num %% 10\n        sum <- sum + digit^3\n        num <- num %/% 10\n    }\n    return(sum == n)\n}\nprint(is_armstrong(153))",
+                sql: "WITH RECURSIVE armstrong(n, sum, num) AS (\n    SELECT 153, 0, 153\n    UNION ALL\n    SELECT n, sum + POW(num % 10, 3), num / 10\n    FROM armstrong\n    WHERE num > 0\n)\nSELECT sum FROM armstrong WHERE num = 0 AND sum = 153;"
+            },
+            catalan: {
+                python: "def catalan(n):\n    if n == 0:\n        return 1\n    return (2 * (2 * n - 1) * catalan(n - 1)) // (n + 1)\n\nfor i in range(10):\n    print(catalan(i))",
+                java: "public class Catalan {\n    public static int catalan(int n) {\n        if (n == 0) return 1;\n        return (2 * (2 * n - 1) * catalan(n - 1)) / (n + 1);\n    }\n\n    public static void main(String[] args) {\n        for (int i = 0; i < 10; i++) {\n            System.out.println(catalan(i));\n        }\n    }\n}",
+                c: "#include <stdio.h>\n\nint catalan(int n) {\n    if (n == 0) return 1;\n    return (2 * (2 * n - 1) * catalan(n - 1)) / (n + 1);\n}\n\nint main() {\n    for (int i = 0; i < 10; i++) {\n        printf(\"%d\\n\", catalan(i));\n    }\n    return 0;\n}",
+                cpp: "#include <iostream>\nusing namespace std;\n\nint catalan(int n) {\n    if (n == 0) return 1;\n    return (2 * (2 * n - 1) * catalan(n - 1)) / (n + 1);\n}\n\nint main() {\n    for (int i = 0; i < 10; i++) {\n        cout << catalan(i) << endl;\n    }\n    return 0;\n}",
+                r: "catalan <- function(n) {\n    if (n == 0) return(1)\n    return((2 * (2 * n - 1) * catalan(n - 1)) / (n + 1))\n}\nfor (i in 0:9) {\n    print(catalan(i))\n}",
+                sql: "WITH RECURSIVE catalan(n, value) AS (\n    SELECT 0, 1\n    UNION ALL\n    SELECT n + 1, (2 * (2 * (n + 1) - 1) * value) / (n + 2)\n    FROM catalan\n    WHERE n < 9\n)\nSELECT value FROM catalan;"
+            }
+        };
+
+        function displaySelection() {
+            const sequence = document.getElementById('sequence').value;
+            const language = document.getElementById('language').value;
+
+            document.getElementById('output').textContent = codeExamples[sequence][language] || "Code not available for this selection.";
+        }
+    </script>
+</body>
+</html>
